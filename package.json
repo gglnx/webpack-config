@@ -1,0 +1,70 @@
+{
+  "name": "@gglnx/webpack-config",
+  "version": "0.1.0",
+  "description": "Opinionated Webpack configuration builder",
+  "main": "index.mjs",
+  "author": "Dennis Morhardt <info@dennismorhardt.de>",
+  "license": "MIT",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gglnx/webpack-config.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gglnx/webpack-config/issues"
+  },
+  "homepage": "https://github.com/gglnx/webpack-config#readme",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "dependencies": {
+    "arrify": "^3.0.0",
+    "ts-deepmerge": "^7.0.0",
+    "webpack-merge": "^5.10.0"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7",
+    "@babel/eslint-parser": "^7",
+    "@babel/preset-env": "^7",
+    "@babel/preset-typescript": "^7",
+    "autoprefixer": "^10",
+    "babel-loader": "^9",
+    "browserslist": "^4",
+    "copy-webpack-plugin": "^12",
+    "cosmiconfig": "^9",
+    "css-loader": "^7",
+    "css-minimizer-webpack-plugin": "^7",
+    "globby": "^14",
+    "lightningcss": "^1",
+    "mini-css-extract-plugin": "^2",
+    "postcss": "^8",
+    "postcss-import": "^16",
+    "postcss-loader": "^8",
+    "postcss-preset-env": "^9",
+    "resolve-url-loader": "^5",
+    "sass": "^1",
+    "sass-loader": "^14",
+    "svg-chunk-webpack-plugin": "^6",
+    "webpack": "^5.92",
+    "webpack-bundle-analyzer": "^4",
+    "webpack-manifest-plugin": "^5",
+    "webpack-remove-empty-scripts": "^1"
+  },
+  "devDependencies": {
+    "@gglnx/eslint-config": "^1.0.1",
+    "@types/node": "^20.14.2",
+    "@types/webpack-bundle-analyzer": "^4.7.0",
+    "tsup": "^8.1.0",
+    "typescript": "^5.4.5"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint --report-unused-disable-directives ."
+  }
+}

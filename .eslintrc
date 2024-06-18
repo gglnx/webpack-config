@@ -1,0 +1,12 @@
+{
+  "root": true,
+  "extends": [
+    "@gglnx/eslint-config"
+  ],
+  "rules": {
+    "import/prefer-default-export": ["off"],
+    "import/no-extraneous-dependencies": ["error", {
+      "peerDependencies": true
+    }]
+  }
+}
