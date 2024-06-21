@@ -35,7 +35,11 @@ export class Builder {
     this.mode = mode;
   }
 
-  add(transformer: ConfigTransformer | AsyncConfigTransformer | ConfigTransformerWithOptions) {
+  add(transformer: ConfigTransformer | AsyncConfigTransformer | ConfigTransformerWithOptions | null | undefined) {
+    if (!transformer) {
+      return this;
+    }
+
     if (typeof transformer === 'function') {
       this.pipeline.push({
         priority: 0,
