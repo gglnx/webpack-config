@@ -11,6 +11,7 @@ export const analyzer = (reportFilename = 'report.html'): ConfigTransformer => (
         analyzerMode: 'static',
         reportFilename,
         openAnalyzer: false,
+        logLevel: 'error',
       }),
     ],
   },
