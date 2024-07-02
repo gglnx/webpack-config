@@ -1,5 +1,5 @@
 import { WebpackManifestPlugin } from 'webpack-manifest-plugin';
-import { basename, dirname, join } from 'path';
+import { basename, dirname, join } from 'node:path';
 import { ConfigTransformerWithOptions } from '../Builder';
 
 export const manifest = (filename = 'manifest.json', publicPath = ''): ConfigTransformerWithOptions => ({
