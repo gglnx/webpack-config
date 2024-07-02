@@ -1,13 +1,18 @@
-import { createHash } from 'crypto';
+import { createHash } from 'node:crypto';
 import { cosmiconfig } from 'cosmiconfig';
+import { globby } from 'globby';
+import { extname } from 'node:path';
 import SvgChunkWebpackPlugin from 'svg-chunk-webpack-plugin';
-import { merge } from 'webpack-merge';
-import { entryPoint } from './entryPoint';
 import { AsyncConfigTransformer } from '../Builder';
+import { removeExtension } from '../utils';
 
 let hasRun = false;
 
-export const svgIconSprite = (outputFilename: string, globs: string | string[]): AsyncConfigTransformer => {
+export const svgIconSprite = (
+  outputFilename: string,
+  globs: string | string[],
+  hash = true,
+): AsyncConfigTransformer => {
   if (hasRun) {
     throw new Error('Currently only one SvgIconSprite is allowed. Sorry!');
   }
@@ -17,12 +22,28 @@ export const svgIconSprite = (outputFilename: string, globs: string | string[]):
   const hasher = createHash('sha1');
   const id = hasher.update(Array.isArray(globs) ? globs.join() : globs).digest('hex');
   const name = `svgIconSprite:${id}`;
-  const entryPointConfig = entryPoint(name, globs);
 
   return async (config) => {
     const svgoConfig = await cosmiconfig('svgo').search();
+    const entryName = removeExtension(outputFilename);
+    const extension = extname(outputFilename);
 
-    return merge(await entryPointConfig(config), {
+    let filename = `[name]${extension}`;
+
+    if (hash && typeof config.output?.hashDigestLength === 'number') {
+      filename = `[name].[contenthash]${extension}`;
+    }
+
+    return {
+      entry: {
+        [entryName]: {
+          layer: name,
+          import: await globby(globs, {
+            cwd: config.context,
+            absolute: true,
+          }),
+        },
+      },
       module: {
         rules: [
           {
@@ -40,7 +61,7 @@ export const svgIconSprite = (outputFilename: string, globs: string | string[]):
       },
       plugins: [
         new SvgChunkWebpackPlugin({
-          filename: outputFilename,
+          filename,
           svgstoreConfig: {
             renameDefs: true,
             inline: true,
@@ -51,6 +72,6 @@ export const svgIconSprite = (outputFilename: string, globs: string | string[]):
           },
         }),
       ],
-    });
+    };
   };
 };
