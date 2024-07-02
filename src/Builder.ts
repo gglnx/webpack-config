@@ -1,5 +1,6 @@
 import { type Configuration } from 'webpack';
 import { merge as deepMerge } from 'ts-deepmerge';
+import { dirname, join } from 'node:path';
 
 export declare type MergeStrategy = 'default' | 'overwrite';
 
@@ -67,9 +68,21 @@ export class Builder {
         path: this.outputPath,
         assetModuleFilename: '[path][name][ext]',
         filename: '[name].js',
-        chunkFilename: '[id].js',
+        chunkFilename(pathData) {
+          if (pathData.chunk && 'runtime' in pathData.chunk && typeof pathData.chunk.runtime === 'string') {
+            return join(dirname(pathData.chunk.runtime), '[id].js');
+          }
+
+          return '[id].js';
+        },
         cssFilename: '[name].css',
-        cssChunkFilename: '[id].css',
+        cssChunkFilename(pathData) {
+          if (pathData.chunk && 'runtime' in pathData.chunk && typeof pathData.chunk.runtime === 'string') {
+            return join(dirname(pathData.chunk.runtime), '[id].css');
+          }
+
+          return '[id].css';
+        },
       },
       performance: {
         hints: false,
