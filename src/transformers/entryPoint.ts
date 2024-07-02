@@ -17,21 +17,4 @@ export const entryPoint = (name: string, globs: string | string[]): AsyncConfigT
       },
     };
   }, {}),
-  optimization: {
-    chunkIds: 'named',
-    splitChunks: {
-      minChunks: 2,
-      cacheGroups: {
-        [name]: {
-          name: 'main',
-          type: 'css/mini-extract',
-          chunks: (chunk) => chunk.name === name,
-          enforce: true,
-        },
-      },
-    },
-  },
-  experiments: {
-    layers: true,
-  },
 });

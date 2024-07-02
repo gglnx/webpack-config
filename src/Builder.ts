@@ -57,6 +57,12 @@ export class Builder {
     let config: Configuration = {
       mode: this.mode,
       context: this.sourcePath,
+      optimization: {
+        chunkIds: 'named',
+      },
+      experiments: {
+        layers: true,
+      },
       output: {
         path: this.outputPath,
         assetModuleFilename: '[path][name][ext]',
