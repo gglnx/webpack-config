@@ -35,6 +35,6 @@ export const babel = (): ConfigTransformer => () => ({
   },
   resolve: {
     modules: ['node_modules'],
-    extensions: ['.js', '.mjs', '.cjs', '.jsx', '', 'x'],
+    extensions: ['.js', '.mjs', '.cjs', '.jsx', '.ts', '.tsx'],
   },
 });
