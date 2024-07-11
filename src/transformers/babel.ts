@@ -8,6 +8,7 @@ export const babel = (): ConfigTransformer => () => ({
         use: {
           loader: 'babel-loader',
           options: {
+            compact: false,
             sourceType: 'unambiguous',
             presets: [
               [
@@ -32,9 +33,5 @@ export const babel = (): ConfigTransformer => () => ({
         },
       },
     ],
-  },
-  resolve: {
-    modules: ['node_modules'],
-    extensions: ['.js', '.mjs', '.cjs', '.jsx', '.ts', '.tsx'],
   },
 });

@@ -1,6 +1,10 @@
 import { ConfigTransformer } from '../Builder';
 
-export const embedSmallFonts = (maxSize = 4 * 1024): ConfigTransformer => () => ({
+export type EmbedSmallFontsOptions = {
+  maxSize?: number;
+};
+
+export const embedSmallFonts = ({ maxSize = 4 * 1024 }: EmbedSmallFontsOptions = {}): ConfigTransformer => () => ({
   module: {
     rules: [
       {

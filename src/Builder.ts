@@ -1,8 +1,15 @@
-import { type Configuration } from 'webpack';
+import type { Configuration } from 'webpack';
 import { merge as deepMerge } from 'ts-deepmerge';
 import { dirname, join } from 'node:path';
+import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
+import { TransformAttributeOptions, browserslistToTargets } from 'lightningcss';
+import browserslist from 'browserslist';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import WebpackRemoveEmptyScriptsPlugin from 'webpack-remove-empty-scripts';
 
 export declare type MergeStrategy = 'default' | 'overwrite';
+
+export declare type WebpackMode = 'none' | 'development' | 'production';
 
 export declare type AsyncConfigTransformer = (
   config: Configuration
@@ -24,16 +31,28 @@ export declare type ConfigTransformerWithOptions = {
   mergeStrategy?: MergeStrategy;
 };
 
+export declare type BuilderOptions = {
+  sourcePath: string;
+  outputPath: string;
+  mode?: WebpackMode;
+  cssChunkPath?: string;
+  chunkPath?: string;
+  hashDigestLength?: number;
+};
+
+const cssFilename = () => '[name].css';
+
+const chunkFilename = (extension: string, chunkPath?: string) => join(
+  chunkPath ?? '',
+  `[id].[contenthash].${extension}`,
+);
+
 export class Builder {
-  private sourcePath: string;
-  private outputPath: string;
-  private mode: 'none' | 'development' | 'production';
+  private options: BuilderOptions;
   private pipeline: Array<PipelineTransformer> = [];
 
-  constructor(sourcePath: string, outputPath: string, mode: 'none' | 'development' | 'production') {
-    this.sourcePath = sourcePath;
-    this.outputPath = outputPath;
-    this.mode = mode;
+  constructor(options: BuilderOptions) {
+    this.options = options;
   }
 
   add(transformer: ConfigTransformer | AsyncConfigTransformer | ConfigTransformerWithOptions | null | undefined) {
@@ -56,33 +75,49 @@ export class Builder {
 
   async build() {
     let config: Configuration = {
-      mode: this.mode,
-      context: this.sourcePath,
+      mode: this.options.mode ?? 'none',
+      context: this.options.sourcePath,
       optimization: {
         chunkIds: 'named',
+        splitChunks: {
+          minChunks: 2,
+        },
+        minimizer: ['...', new CssMinimizerPlugin<Partial<TransformAttributeOptions>>({
+          minify: CssMinimizerPlugin.lightningCssMinify,
+          minimizerOptions: {
+            targets: browserslistToTargets(browserslist()),
+          },
+        })],
       },
       experiments: {
         layers: true,
       },
       output: {
-        path: this.outputPath,
-        assetModuleFilename: '[path][name][ext]',
-        filename: '[name].js',
-        chunkFilename(pathData) {
-          if (pathData.chunk && 'runtime' in pathData.chunk && typeof pathData.chunk.runtime === 'string') {
-            return join(dirname(pathData.chunk.runtime), '[id].js');
+        path: this.options.outputPath,
+        hashDigestLength: this.options.hashDigestLength ?? 10,
+        assetModuleFilename(file) {
+          let path = '';
+
+          if (file.filename) {
+            path = `${dirname(file.filename)}/`;
+
+            if (path === './') {
+              path = '';
+            }
+
+            if (path.startsWith('../')) {
+              path = path.substring(path.indexOf('/') + 1);
+            }
           }
 
-          return '[id].js';
+          return `${path}[name].[contenthash][ext]`;
         },
-        cssFilename: '[name].css',
-        cssChunkFilename(pathData) {
-          if (pathData.chunk && 'runtime' in pathData.chunk && typeof pathData.chunk.runtime === 'string') {
-            return join(dirname(pathData.chunk.runtime), '[id].css');
-          }
-
-          return '[id].css';
+        filename() {
+          return '[name].js';
         },
+        chunkFilename: () => chunkFilename('js', this.options.chunkPath),
+        cssFilename,
+        cssChunkFilename: () => chunkFilename('css', this.options.cssChunkPath),
       },
       performance: {
         hints: false,
@@ -90,6 +125,34 @@ export class Builder {
       watchOptions: {
         poll: 500,
       },
+      resolve: {
+        modules: ['node_modules'],
+        extensions: ['.js', '.mjs', '.cjs', '.jsx', '.ts', '.tsx'],
+      },
+      plugins: [
+        new MiniCssExtractPlugin({
+          filename: (pathData, assetInfo) => {
+            if (pathData.chunk && 'filenameTemplate' in pathData.chunk) {
+              if (typeof pathData.chunk.filenameTemplate === 'function') {
+                return pathData.chunk.filenameTemplate(pathData, {
+                  ...assetInfo,
+                  css: true,
+                });
+              }
+
+              if (typeof pathData.chunk.filenameTemplate === 'string') {
+                return pathData.chunk.filenameTemplate;
+              }
+            }
+
+            return '[name].css';
+          },
+          chunkFilename: () => chunkFilename('css', this.options.cssChunkPath),
+        }),
+        new WebpackRemoveEmptyScriptsPlugin({
+          extensions: /\.(css|scss|sass|less|styl|svg)([?].*)?$/,
+        }),
+      ],
     };
 
     for (const { transformer, mergeStrategy } of this.pipeline.sort((a, b) => a.priority - b.priority)) {

@@ -8,11 +8,17 @@ import { removeExtension } from '../utils';
 
 let hasRun = false;
 
-export const svgIconSprite = (
-  outputFilename: string,
-  globs: string | string[],
-  hash = true,
-): AsyncConfigTransformer => {
+export type SvgIconSpriteOptions = {
+  outputFilename: string;
+  globs: string | string[];
+  hash: boolean;
+};
+
+export const svgIconSprite = ({
+  outputFilename,
+  globs,
+  hash = false,
+}: SvgIconSpriteOptions): AsyncConfigTransformer => {
   if (hasRun) {
     throw new Error('Currently only one SvgIconSprite is allowed. Sorry!');
   }
@@ -30,7 +36,7 @@ export const svgIconSprite = (
 
     let filename = `[name]${extension}`;
 
-    if (hash && typeof config.output?.hashDigestLength === 'number') {
+    if (hash) {
       filename = `[name].[contenthash]${extension}`;
     }
 
