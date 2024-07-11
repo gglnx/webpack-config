@@ -1,6 +1,6 @@
 {
   "name": "@gglnx/webpack-config",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "Opinionated Webpack configuration builder",
   "main": "index.mjs",
   "author": "Dennis Morhardt <info@dennismorhardt.de>",
