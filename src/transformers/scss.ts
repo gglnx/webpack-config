@@ -1,29 +1,37 @@
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import { NodePackageImporter } from 'sass';
+import { cosmiconfig } from 'cosmiconfig';
+import { NodePackageImporter, Options } from 'sass';
+import { merge } from 'ts-deepmerge';
 
-import { ConfigTransformer } from '../Builder';
+import { AsyncConfigTransformer } from '../Builder';
 
-export const scss = (): ConfigTransformer => () => ({
-  module: {
-    rules: [
-      {
-        test: /\.scss$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          'css-loader',
-          'postcss-loader',
-          'resolve-url-loader',
-          {
-            loader: 'sass-loader',
-            options: {
-              sourceMap: true,
-              sassOptions: {
-                importers: [new NodePackageImporter()],
+export const scss = (): AsyncConfigTransformer => async () => {
+  const sassConfig = await cosmiconfig('sass').search();
+  const sassOptions: Options<'async'> = sassConfig?.config ?? {};
+  const sassDefaultOptions: Options<'async'> = {
+    importers: [new NodePackageImporter()],
+  };
+
+  return {
+    module: {
+      rules: [
+        {
+          test: /\.scss$/,
+          use: [
+            MiniCssExtractPlugin.loader,
+            'css-loader',
+            'postcss-loader',
+            'resolve-url-loader',
+            {
+              loader: 'sass-loader',
+              options: {
+                sourceMap: true,
+                sassOptions: merge(sassDefaultOptions, sassOptions),
               },
             },
-          },
-        ],
-      },
-    ],
-  },
-});
+          ],
+        },
+      ],
+    },
+  };
+};
