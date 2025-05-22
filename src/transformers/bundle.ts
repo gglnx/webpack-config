@@ -1,5 +1,5 @@
 import { resolve } from 'node:path';
-import type { NormalModule, ModuleGraph, ChunkGraph } from 'webpack';
+import type { Module, ModuleGraph, ChunkGraph } from 'webpack';
 
 import { ConfigTransformer } from '../Builder';
 import { removeExtension } from '../utils';
@@ -52,7 +52,7 @@ export const bundle = ({
             type: 'css/mini-extract',
             enforce: true,
             chunks: mergeCss ? 'all' : 'initial',
-            test(module: NormalModule, { moduleGraph, chunkGraph }: CacheGroupsContext) {
+            test(module: Module, { moduleGraph, chunkGraph }: CacheGroupsContext) {
               if (module.type !== 'css/mini-extract') {
                 return false;
               }
