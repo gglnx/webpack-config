@@ -1,9 +1,9 @@
 {
   "name": "@gglnx/webpack-config",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Opinionated Webpack configuration builder",
   "main": "index.mjs",
-  "author": "Dennis Morhardt <info@dennismorhardt.de>",
+  "author": "gglnx <gglnx@gglnx.space>",
   "license": "MIT",
   "type": "module",
   "repository": {
