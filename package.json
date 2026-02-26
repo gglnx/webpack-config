@@ -23,7 +23,6 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
-    "arrify": "^3.0.0",
     "ts-deepmerge": "^7.0.3",
     "webpack-merge": "^6.0.1"
   },

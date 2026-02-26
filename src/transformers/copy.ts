@@ -1,5 +1,4 @@
 import CopyPlugin from 'copy-webpack-plugin';
-import arrify from 'arrify';
 import { ConfigTransformer } from '../Builder';
 
 export type CopyOptions = {
@@ -10,7 +9,7 @@ export type CopyOptions = {
 export const copy = ({ copyFrom, hash = false }: CopyOptions): ConfigTransformer => () => ({
   plugins: [
     new CopyPlugin({
-      patterns: arrify(copyFrom).map((from) => ({
+      patterns: (copyFrom == null ? [] : Array.isArray(copyFrom) ? copyFrom : [copyFrom]).map((from) => ({
         from,
         to: () => (hash ? '[path][name].[contenthash][ext]' : '[path][name][ext]'),
       })),
