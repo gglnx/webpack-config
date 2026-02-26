@@ -56,7 +56,6 @@ export const svgIconSprite = ({
             test: /\.svg$/,
             issuerLayer: (layer) => layer === name,
             use: {
-              // @ts-expect-error Loader is not part of type definitions
               loader: SvgChunkWebpackPlugin.loader,
               options: {
                 configFile: svgoConfig?.filepath,
