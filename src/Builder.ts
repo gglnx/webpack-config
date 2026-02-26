@@ -86,6 +86,7 @@ export class Builder {
           minify: CssMinimizerPlugin.lightningCssMinify,
           minimizerOptions: {
             targets: browserslistToTargets(browserslist()),
+            errorRecovery: true,
           },
         })],
       },
