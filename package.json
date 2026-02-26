@@ -1,6 +1,6 @@
 {
   "name": "@gglnx/webpack-config",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Opinionated Webpack configuration builder",
   "main": "index.mjs",
   "author": "gglnx <gglnx@gglnx.space>",
