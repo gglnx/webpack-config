@@ -58,12 +58,15 @@
     "@gglnx/eslint-config": "^2.0.0-beta.1",
     "@types/node": "^26.0.1",
     "@types/webpack-bundle-analyzer": "^4.7.0",
+    "npm-run-all": "^4.1.5",
     "tsup": "^8.5.1",
     "typescript": "^6.0.3"
   },
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "lint": "eslint --report-unused-disable-directives ."
+    "test": "run-s -sc test:**",
+    "test:eslint": "eslint --report-unused-disable-directives .",
+    "test:typescript": "tsc --noEmit -p ."
   }
 }
