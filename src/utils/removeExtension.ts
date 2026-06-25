@@ -1,6 +1,6 @@
 import {
   basename, dirname, extname, join, sep,
-} from 'path';
+} from 'node:path';
 
 export const removeExtension = (path: string) => {
   if (path.length === 0) {
