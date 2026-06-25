@@ -25,5 +25,5 @@ export const manifest = ({
       }),
     ],
   }),
-  priority: 99999,
+  priority: 99_999,
 });

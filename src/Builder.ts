@@ -12,22 +12,22 @@ export declare type MergeStrategy = 'default' | 'overwrite';
 export declare type WebpackMode = 'none' | 'development' | 'production';
 
 export declare type AsyncConfigTransformer = (
-  config: Configuration
+  config: Configuration,
 ) => Promise<Configuration>;
 
 export declare type ConfigTransformer = (
-  config: Configuration
+  config: Configuration,
 ) => Configuration;
 
 export declare type PipelineTransformer = {
-  transformer: AsyncConfigTransformer | ConfigTransformer,
-  priority: number,
-  mergeStrategy: MergeStrategy,
+  transformer: AsyncConfigTransformer | ConfigTransformer;
+  priority: number;
+  mergeStrategy: MergeStrategy;
 };
 
 export declare type ConfigTransformerWithOptions = {
-  transformer: AsyncConfigTransformer | ConfigTransformer,
-  priority?: number,
+  transformer: AsyncConfigTransformer | ConfigTransformer;
+  priority?: number;
   mergeStrategy?: MergeStrategy;
 };
 
@@ -107,7 +107,7 @@ export class Builder {
             }
 
             if (path.startsWith('../')) {
-              path = path.substring(path.indexOf('/') + 1);
+              path = path.slice(Math.max(0, path.indexOf('/') + 1));
             }
           }
 
@@ -156,15 +156,12 @@ export class Builder {
       ],
     };
 
-    for (const { transformer, mergeStrategy } of this.pipeline.sort((a, b) => a.priority - b.priority)) {
-      // eslint-disable-next-line no-await-in-loop
+    const sortedPipeline = this.pipeline.toSorted((a, b) => a.priority - b.priority);
+
+    for (const { transformer, mergeStrategy } of sortedPipeline) {
       const outputedConfig = await transformer(config);
 
-      if (mergeStrategy === 'overwrite') {
-        config = outputedConfig;
-      } else {
-        config = deepMerge(config, outputedConfig);
-      }
+      config = mergeStrategy === 'overwrite' ? outputedConfig : deepMerge(config, outputedConfig);
     }
 
     return config;

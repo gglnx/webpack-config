@@ -26,7 +26,7 @@ export const svgIconSprite = ({
   hasRun = true;
 
   const hasher = createHash('sha1');
-  const id = hasher.update(Array.isArray(globs) ? globs.join() : globs).digest('hex');
+  const id = hasher.update(Array.isArray(globs) ? globs.join(',') : globs).digest('hex');
   const name = `svgIconSprite:${id}`;
 
   return async (config) => {
@@ -34,11 +34,7 @@ export const svgIconSprite = ({
     const entryName = removeExtension(outputFilename);
     const extension = extname(outputFilename);
 
-    let filename = `[name]${extension}`;
-
-    if (hash) {
-      filename = `[name].[contenthash]${extension}`;
-    }
+    const filename = hash ? `[name].[contenthash]${extension}` : `[name]${extension}`;
 
     return {
       entry: {
@@ -71,7 +67,7 @@ export const svgIconSprite = ({
             renameDefs: true,
             inline: true,
             svgAttrs: {
-              xmlns: 'http://www.w3.org/2000/svg',
+              'xmlns': 'http://www.w3.org/2000/svg',
               'xmlns:xlink': 'http://www.w3.org/1999/xlink',
             },
           },

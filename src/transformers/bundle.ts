@@ -15,7 +15,7 @@ export type BundleOptions = {
 type CacheGroupsContext = {
   moduleGraph: ModuleGraph;
   chunkGraph: ChunkGraph;
-}
+};
 
 export const bundle = ({
   name,
@@ -43,34 +43,34 @@ export const bundle = ({
         },
       },
     },
-    optimization: cssEntry ? {
-      splitChunks: {
-        cacheGroups: {
-          [name]: {
-            reuseExistingChunk: false,
-            name,
-            type: 'css/mini-extract',
-            enforce: true,
-            chunks: mergeCss ? 'all' : 'initial',
-            test(module: Module, { moduleGraph, chunkGraph }: CacheGroupsContext) {
-              if (module.type !== 'css/mini-extract') {
-                return false;
-              }
-
-              // Skip chunks that have more than one runtimes (don't share chunks between bundles)
-              for (const chunk of chunkGraph.getModuleChunks(module)) {
-                if (typeof chunk.runtime === 'object') {
-                  if (chunk.runtime.size > 1) {
+    optimization: cssEntry
+      ? {
+          splitChunks: {
+            cacheGroups: {
+              [name]: {
+                reuseExistingChunk: false,
+                name,
+                type: 'css/mini-extract',
+                enforce: true,
+                chunks: mergeCss ? 'all' : 'initial',
+                test(module: Module, { moduleGraph, chunkGraph }: CacheGroupsContext) {
+                  if (module.type !== 'css/mini-extract') {
                     return false;
                   }
-                }
-              }
 
-              return module.layer === layer || moduleGraph.getIssuer(module)?.layer === layer;
+                  // Skip chunks that have more than one runtimes (don't share chunks between bundles)
+                  for (const chunk of chunkGraph.getModuleChunks(module)) {
+                    if (typeof chunk.runtime === 'object' && chunk.runtime.size > 1) {
+                      return false;
+                    }
+                  }
+
+                  return module.layer === layer || moduleGraph.getIssuer(module)?.layer === layer;
+                },
+              },
             },
           },
-        },
-      },
-    } : {},
+        }
+      : {},
   };
 };

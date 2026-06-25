@@ -11,3 +11,4 @@ export * from './publicPath';
 export * from './scss';
 export * from './sourceMaps';
 export * from './svgIconSprite';
+export * from './typescript';
