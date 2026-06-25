@@ -23,22 +23,22 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
-    "ts-deepmerge": "^7.0.3",
-    "webpack-merge": "^6.0.1"
+    "ts-deepmerge": "^7 || ^8",
+    "webpack-merge": "^6"
   },
   "peerDependencies": {
-    "@babel/core": "^7",
-    "@babel/preset-env": "^7",
-    "@babel/preset-typescript": "^7",
+    "@babel/core": "^8",
+    "@babel/preset-env": "^8",
+    "@babel/preset-typescript": "^8",
     "autoprefixer": "^10",
     "babel-loader": "^10",
     "browserslist": "^4",
-    "copy-webpack-plugin": "^13",
+    "copy-webpack-plugin": "^14",
     "cosmiconfig": "^9",
     "css-loader": "^7",
-    "css-minimizer-webpack-plugin": "^7",
+    "css-minimizer-webpack-plugin": "^8",
     "globby": "^16",
-    "lightningcss": "^1.31",
+    "lightningcss": "^1.32",
     "mini-css-extract-plugin": "^2",
     "postcss": "^8",
     "postcss-import": "^16",
@@ -46,19 +46,20 @@
     "postcss-preset-env": "^11",
     "resolve-url-loader": "^5",
     "sass": "^1",
-    "sass-loader": "^16",
+    "sass-loader": "^17",
     "svg-chunk-webpack-plugin": "^8",
-    "webpack": "^5.105",
+    "typescript": "^5 || ^6",
+    "webpack": "^5",
     "webpack-bundle-analyzer": "^5",
     "webpack-manifest-plugin": "^6",
     "webpack-remove-empty-scripts": "^1"
   },
   "devDependencies": {
     "@gglnx/eslint-config": "^2.0.0-beta.1",
-    "@types/node": "^25.3.1",
+    "@types/node": "^26.0.1",
     "@types/webpack-bundle-analyzer": "^4.7.0",
     "tsup": "^8.5.1",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.3"
   },
   "scripts": {
     "build": "tsup",
