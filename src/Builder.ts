@@ -106,9 +106,7 @@ export class Builder {
               path = '';
             }
 
-            if (path.startsWith('../')) {
-              path = path.slice(Math.max(0, path.indexOf('/') + 1));
-            }
+            path = path.replace(/^(\.\.\/)+/, '');
           }
 
           return `${path}[name].[contenthash][ext]`;
