@@ -5,9 +5,9 @@ export const typescript = (): ConfigTransformer => () => ({
     rules: [
       {
         test: /\.tsx?$/,
+        exclude: /node_modules/,
         use: {
           loader: 'ts-loader',
-          exclude: /node_modules/,
         },
       },
     ],
