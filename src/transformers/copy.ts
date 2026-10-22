@@ -3,7 +3,7 @@ import { ConfigTransformer } from '../Builder';
 
 export type CopyOptions = {
   copyFrom: string | string[];
-  hash: boolean;
+  hash?: boolean;
 };
 
 export const copy = ({ copyFrom, hash = false }: CopyOptions): ConfigTransformer => () => ({

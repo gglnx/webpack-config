@@ -6,10 +6,10 @@ import { removeExtension } from '../utils';
 
 export type BundleOptions = {
   name: string;
-  cssEntry: string | undefined;
-  jsEntry: string | undefined;
-  hash: boolean;
-  mergeCss: boolean;
+  cssEntry?: string;
+  jsEntry?: string;
+  hash?: boolean;
+  mergeCss?: boolean;
 };
 
 type CacheGroupsContext = {

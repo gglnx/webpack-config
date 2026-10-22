@@ -9,7 +9,7 @@ import { removeExtension } from '../utils';
 export type SvgIconSpriteOptions = {
   outputFilename: string;
   globs: string | string[];
-  hash: boolean;
+  hash?: boolean;
 };
 
 export const svgIconSprite = ({
