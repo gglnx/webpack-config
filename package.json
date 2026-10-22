@@ -2,7 +2,7 @@
   "name": "@gglnx/webpack-config",
   "version": "1.0.0-beta.1",
   "description": "Opinionated Webpack configuration builder",
-  "main": "index.mjs",
+  "main": "./dist/index.js",
   "author": "gglnx <gglnx@gglnx.space>",
   "license": "MIT",
   "type": "module",
