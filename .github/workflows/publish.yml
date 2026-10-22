@@ -64,6 +64,16 @@ jobs:
       - run: npm test
       - run: npm run build
       - run: |
+          if [ -n "$(npm view "$(jq -r .name package.json)@$VERSION" version 2>/dev/null)" ]; then
+            echo "$VERSION is already published to npm"
+          else
+            npm publish --tag "$NPM_TAG" --provenance --access public
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TAG: ${{ needs.preflight.outputs.npm_tag }}
+          VERSION: ${{ needs.preflight.outputs.version }}
+      - run: |
           args=(--title "$VERSION" --target "$GITHUB_SHA")
           if [ "$NPM_TAG" = "next" ]; then
             args+=(--prerelease)
@@ -88,8 +98,4 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           VERSION: ${{ needs.preflight.outputs.version }}
-          NPM_TAG: ${{ needs.preflight.outputs.npm_tag }}
-      - run: npm publish --tag "$NPM_TAG" --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_TAG: ${{ needs.preflight.outputs.npm_tag }}
