@@ -8,7 +8,7 @@ export default defineConfig({
   },
   bundle: true,
   treeshake: true,
-  format: ['esm', 'cjs'],
+  format: ['esm'],
   entry: ['src/index.ts'],
   splitting: false,
   sourcemap: true,
