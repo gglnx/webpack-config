@@ -6,8 +6,6 @@ import SvgChunkWebpackPlugin from 'svg-chunk-webpack-plugin';
 import { AsyncConfigTransformer } from '../Builder';
 import { removeExtension } from '../utils';
 
-let hasRun = false;
-
 export type SvgIconSpriteOptions = {
   outputFilename: string;
   globs: string | string[];
@@ -19,17 +17,15 @@ export const svgIconSprite = ({
   globs,
   hash = false,
 }: SvgIconSpriteOptions): AsyncConfigTransformer => {
-  if (hasRun) {
-    throw new Error('Currently only one SvgIconSprite is allowed. Sorry!');
-  }
-
-  hasRun = true;
-
   const hasher = createHash('sha1');
   const id = hasher.update(Array.isArray(globs) ? globs.join(',') : globs).digest('hex');
   const name = `svgIconSprite:${id}`;
 
   return async (config) => {
+    if (config.plugins?.some((plugin) => plugin instanceof SvgChunkWebpackPlugin)) {
+      throw new Error('Currently only one SvgIconSprite per config is allowed. Sorry!');
+    }
+
     const svgoConfig = await cosmiconfig('svgo').search();
     const entryName = removeExtension(outputFilename);
     const extension = extname(outputFilename);
