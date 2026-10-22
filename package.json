@@ -70,8 +70,9 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "test": "run-s -sc test:**",
+    "test": "tsup --silent && run-s -sc test:**",
     "test:eslint": "eslint --report-unused-disable-directives .",
-    "test:typescript": "tsc --noEmit -p ."
+    "test:typescript": "tsc --noEmit -p .",
+    "test:smoke": "node --test 'test/*.test.mjs'"
   }
 }
