@@ -54,6 +54,14 @@ describe('builder', () => {
     assert.doesNotThrow(() => webpack.validate(config));
   });
 
+  it('only polls for changes when enabled', async () => {
+    const config = await createBuilder().build();
+    const pollingConfig = await new Builder({ sourcePath: fixturePath, outputPath, watchPoll: 500 }).build();
+
+    assert.equal(config.watchOptions.poll, false);
+    assert.equal(pollingConfig.watchOptions.poll, 500);
+  });
+
   it('keeps assets from outside the context inside the output path', async () => {
     const config = await createBuilder().build();
     const filename = (file) => config.output.assetModuleFilename({ filename: file });

@@ -38,6 +38,7 @@ export declare type BuilderOptions = {
   cssChunkPath?: string;
   chunkPath?: string;
   hashDigestLength?: number;
+  watchPoll?: boolean | number;
 };
 
 const cssFilename = () => '[name].css';
@@ -122,7 +123,7 @@ export class Builder {
         hints: false,
       },
       watchOptions: {
-        poll: 500,
+        poll: this.options.watchPoll ?? false,
       },
       resolve: {
         modules: ['node_modules'],
