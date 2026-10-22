@@ -1,4 +1,7 @@
+import { createRequire } from 'node:module';
 import { ConfigTransformer } from '../Builder';
+
+const corejsPackage = createRequire(import.meta.url)('core-js/package.json') as { version: string };
 
 export const babel = (): ConfigTransformer => () => ({
   module: {
@@ -21,7 +24,7 @@ export const babel = (): ConfigTransformer => () => ({
                 '@babel/preset-env',
                 {
                   modules: 'auto',
-                  corejs: '3',
+                  corejs: corejsPackage.version,
                   shippedProposals: true,
                 },
               ],
