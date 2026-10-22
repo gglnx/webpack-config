@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { mkdtemp, readFile, rm } from 'node:fs/promises';
-import { createRequire } from 'node:module';
+import { builtinModules, createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { after, describe, it } from 'node:test';
@@ -10,10 +10,13 @@ import webpack from 'webpack';
 // Imported through the package exports, so this tests the published build
 import {
   Builder,
+  analyzer,
   babel,
   bundle,
+  copy,
   css,
   manifest,
+  scss,
   svgIconSprite,
   typescript,
 } from '@gglnx/webpack-config';
@@ -42,12 +45,32 @@ const compile = (config) => new Promise((resolve, reject) => {
 
 after(() => rm(outputPath, { recursive: true, force: true }));
 
+describe('package', () => {
+  it('only imports required packages at load time', async () => {
+    const { dependencies, peerDependencies, peerDependenciesMeta } = require('@gglnx/webpack-config/package.json');
+    const allowed = new Set([
+      ...builtinModules,
+      ...builtinModules.map((name) => `node:${name}`),
+      ...Object.keys(dependencies),
+      ...Object.keys(peerDependencies).filter((name) => !peerDependenciesMeta[name]?.optional),
+    ]);
+    const source = await readFile(fileURLToPath(import.meta.resolve('@gglnx/webpack-config')), 'utf8');
+    const imports = source.matchAll(/^import\s.*?['"]([^'"]+)['"];?$/gm).map(([, name]) => name).toArray();
+
+    assert.ok(imports.length > 0);
+    assert.deepEqual(imports.filter((name) => !allowed.has(name)), []);
+  });
+});
+
 describe('builder', () => {
   it('produces a valid webpack config', async () => {
     const config = await createBuilder()
       .add(babel())
       .add(typescript())
       .add(css())
+      .add(scss())
+      .add(copy({ copyFrom: 'icons/**' }))
+      .add(analyzer())
       .add(manifest())
       .build();
 

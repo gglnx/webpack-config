@@ -1,11 +1,12 @@
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { cosmiconfig } from 'cosmiconfig';
-import { NodePackageImporter, Options } from 'sass';
+import type { Options } from 'sass';
 import { merge } from 'ts-deepmerge';
 
 import { AsyncConfigTransformer } from '../Builder';
 
 export const scss = (): AsyncConfigTransformer => async () => {
+  const { NodePackageImporter } = await import('sass');
   const sassConfig = await cosmiconfig('sass').search();
   const sassOptions: Options<'async'> = sassConfig?.config ?? {};
   const sassDefaultOptions: Options<'async'> = {

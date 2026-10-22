@@ -59,11 +59,49 @@
     "webpack-manifest-plugin": "^6",
     "webpack-remove-empty-scripts": "^1"
   },
+  "peerDependenciesMeta": {
+    "@babel/core": {
+      "optional": true
+    },
+    "@babel/preset-env": {
+      "optional": true
+    },
+    "@babel/preset-typescript": {
+      "optional": true
+    },
+    "babel-loader": {
+      "optional": true
+    },
+    "babel-plugin-polyfill-corejs3": {
+      "optional": true
+    },
+    "core-js": {
+      "optional": true
+    },
+    "resolve-url-loader": {
+      "optional": true
+    },
+    "sass": {
+      "optional": true
+    },
+    "sass-loader": {
+      "optional": true
+    }
+  },
   "devDependencies": {
+    "@babel/core": "^8.0.7",
+    "@babel/preset-env": "^8.0.7",
+    "@babel/preset-typescript": "^8.0.7",
     "@gglnx/eslint-config": "^2.0.0-beta.1",
     "@types/node": "^26.6.5",
     "@types/webpack-bundle-analyzer": "^4.7.0",
+    "babel-loader": "^10.1.1",
+    "babel-plugin-polyfill-corejs3": "^1.0.0",
+    "core-js": "^3.51.0",
     "npm-run-all": "^4.1.5",
+    "resolve-url-loader": "^5.0.0",
+    "sass": "^1.106.1",
+    "sass-loader": "^17.0.1",
     "tsup": "^9.0.0",
     "typescript": "^6"
   },
