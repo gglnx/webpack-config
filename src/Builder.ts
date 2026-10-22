@@ -1,6 +1,6 @@
 import type { Configuration } from 'webpack';
 import { merge as deepMerge } from 'ts-deepmerge';
-import { dirname, join } from 'node:path';
+import { dirname, posix } from 'node:path';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import { TransformAttributeOptions, browserslistToTargets } from 'lightningcss';
 import browserslist from 'browserslist';
@@ -42,7 +42,7 @@ export declare type BuilderOptions = {
 
 const cssFilename = () => '[name].css';
 
-const chunkFilename = (extension: string, chunkPath?: string) => join(
+const chunkFilename = (extension: string, chunkPath?: string) => posix.join(
   chunkPath ?? '',
   `[id].[contenthash].${extension}`,
 );
