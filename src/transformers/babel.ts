@@ -14,15 +14,12 @@ export const babel = (): ConfigTransformer => () => ({
               [
                 '@babel/preset-typescript',
                 {
-                  allowDeclareFields: true,
                   onlyRemoveTypeImports: true,
                 },
               ],
               [
                 '@babel/preset-env',
                 {
-                  bugfixes: true,
-                  useBuiltIns: 'entry',
                   modules: 'auto',
                   corejs: '3',
                   shippedProposals: true,
