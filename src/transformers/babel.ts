@@ -8,6 +8,7 @@ export const babel = (): ConfigTransformer => () => ({
     rules: [
       {
         test: /\.(m|c)?(js|ts)x?$/,
+        exclude: /node_modules[\\/]core-js[\\/]/,
         use: {
           loader: 'babel-loader',
           options: {

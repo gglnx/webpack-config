@@ -87,6 +87,14 @@ describe('babel', () => {
 
     assert.match(code, /core-js\/modules\//);
   });
+
+  it('does not compile core-js itself', async () => {
+    const config = await createBuilder().add(babel()).build();
+    const { exclude } = config.module.rules[0];
+
+    assert.match('/project/node_modules/core-js/modules/es.array.at.js', exclude);
+    assert.doesNotMatch('/project/node_modules/other-package/index.js', exclude);
+  });
 });
 
 describe('svgIconSprite', () => {
