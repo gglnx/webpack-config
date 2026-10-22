@@ -13,6 +13,15 @@ export const babel = (): ConfigTransformer => () => ({
           options: {
             compact: false,
             sourceType: 'unambiguous',
+            plugins: [
+              [
+                'babel-plugin-polyfill-corejs3',
+                {
+                  method: 'entry-global',
+                  version: corejsPackage.version,
+                },
+              ],
+            ],
             presets: [
               [
                 '@babel/preset-typescript',
@@ -24,7 +33,6 @@ export const babel = (): ConfigTransformer => () => ({
                 '@babel/preset-env',
                 {
                   modules: 'auto',
-                  corejs: corejsPackage.version,
                   shippedProposals: true,
                 },
               ],
